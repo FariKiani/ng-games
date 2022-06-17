@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Grid} from "../core/model";
+import {FieldState, Grid} from "../core/model";
 import {create} from "../core/logic";
 
 import {create as random, RandomSeed} from 'random-seed'
@@ -10,8 +10,8 @@ import {create as random, RandomSeed} from 'random-seed'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
- 
 
+  public STATE = FieldState
   public grid: Grid;
 
   constructor() {
@@ -22,5 +22,9 @@ export class AppComponent {
     console.log(gen.random())
     console.log(gen.random())
     console.log(gen.random())
+  }
+
+  clickHandler(i: number, j: number) {
+    this.grid[i][j].state = FieldState.OPEN
   }
 }

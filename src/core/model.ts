@@ -5,7 +5,7 @@ export enum FieldState {
 }
 
 export interface Field {
-  readonly state: FieldState
+  state: FieldState
   readonly bomb: boolean
   readonly num: number
 }

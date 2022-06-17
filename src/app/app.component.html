@@ -1,5 +1,12 @@
-<div class="mines-row" *ngFor="let row of grid">
-  <div class="mines-field" *ngFor="let field of row">
-    {{field.bomb ? 'B' : field.num | json}}
+<div class="mines-grid">
+  <div class="mines-row" *ngFor="let row of grid; let i=index">
+    <ng-container *ngFor="let field of row; let j=index">
+      <div class="mines-field" *ngIf="field.state == STATE.OPEN">
+        {{field.bomb ? '💣' : (field.num)}}
+      </div>
+      <div class="mines-field closed" *ngIf="field.state == STATE.CLOSED" (click)="clickHandler(i,j)">
+        {{i + ' ' + j}}
+      </div>
+    </ng-container>
   </div>
 </div>
