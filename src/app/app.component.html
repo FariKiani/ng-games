@@ -2,10 +2,17 @@
   <div class="mines-row" *ngFor="let row of grid; let i=index">
     <ng-container *ngFor="let field of row; let j=index">
       <div class="mines-field" *ngIf="field.state == STATE.OPEN">
-        {{field.bomb ? '💣' : (field.num)}}
+        {{field.bomb ? '💥' : (field.num)}}
       </div>
-      <div class="mines-field closed" *ngIf="field.state == STATE.CLOSED" (click)="clickHandler(i,j)">
+      <div class="mines-field closed"
+           *ngIf="field.state == STATE.CLOSED"
+           (click)="onClickHandler(i,j)"
+           (contextmenu)="onContextMenu($event, i,j)"
+      >
         {{i + ' ' + j}}
+      </div>
+      <div class="mines-field flag" *ngIf="field.state == STATE.FLAGGED" (contextmenu)="onContextMenu($event, i,j)">
+        {{'🚩'}}
       </div>
     </ng-container>
   </div>

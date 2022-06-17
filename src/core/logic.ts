@@ -22,9 +22,9 @@ export function isInList(pos: Position, list: Position[]): boolean {
   return list.some(el => equal(el, pos))
 }
 
-export function countBombs(bombGrid: boolean[][], i: number, j: number): number {
-  const h = bombGrid.length;
-  const w = bombGrid[0].length;
+
+export function validNeighbours(w: number, h: number, i: number, j: number): Position[] {
+
   const pos = {x: j, y: i}
   return [
     {x: -1, y: -1},
@@ -40,12 +40,47 @@ export function countBombs(bombGrid: boolean[][], i: number, j: number): number 
   ]
     .map(point => add(point, pos))
     .filter(({x, y}) => x >= 0 && x < w && y >= 0 && y < h)
+}
+
+export function countBombs(bombGrid: boolean[][], i: number, j: number): number {
+
+  const h = bombGrid.length;
+  const w = bombGrid[0].length;
+  return validNeighbours(w, h, i, j)
     .map(({x, y}): number => bombGrid[y][x] ? 1 : 0)
     .reduce((a, b) => a + b)
 
 }
 
-export function create(w: number, h: number, numberOfBombs: number, pos: Position, gen: RandomSeed): Grid {
+export function flagField(grid: Grid, i: number, j: number) {
+  const field = grid[i][j];
+  if (field.state == FieldState.CLOSED) {
+    field.state = FieldState.FLAGGED
+  } else if (field.state == FieldState.FLAGGED) {
+    field.state = FieldState.CLOSED
+  }
+}
+
+export function openField(grid: Grid, i: number, j: number) {
+  const field = grid[i][j];
+  if (field.state !== FieldState.CLOSED) {
+    return;
+  }
+  field.state = FieldState.OPEN;
+  if (field.num !== 0 || field.bomb) {
+    return;
+  }
+
+  const h = grid.length;
+  const w = grid[0].length;
+  const neighbours = validNeighbours(w, h, i, j);
+  for (const neighbour of neighbours) {
+    openField(grid, neighbour.y, neighbour.x)
+  }
+
+}
+
+export function createGrid(w: number, h: number, numberOfBombs: number, pos: Position, gen: RandomSeed): Grid {
 
   const bombs: Position[] = []
   for (let i = 0; i < numberOfBombs; i++) {
@@ -69,20 +104,20 @@ export function create(w: number, h: number, numberOfBombs: number, pos: Positio
     }
   }
   const grid: Grid = [];
-
-
   for (let i = 0; i < h; i++) {
     const row: Row = []
     grid.push(row);
     for (let j = 0; j < w; j++) {
 
       grid[i][j] = {
-        state: i === pos.y && j === pos.x ? FieldState.OPEN : FieldState.CLOSED,
+        state: FieldState.CLOSED,
         bomb: bombGrid[i][j],
         num: countBombs(bombGrid, i, j)
       };
 
     }
   }
+  openField(grid, pos.y, pos.x)
+
   return grid
 }

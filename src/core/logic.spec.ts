@@ -1,4 +1,4 @@
-import {add, countBombs, create, equal, isInList} from "./logic";
+import {add, countBombs, createGrid, equal, isInList} from "./logic";
 import {create as random, RandomSeed} from "random-seed";
 import {FieldState} from "./model";
 
@@ -99,8 +99,7 @@ describe('logic', () => {
   it('should create grid', () => {
 
     const gen: RandomSeed = random('42')
-    const grid = create(3, 3, 4, {x: 1, y: 0}, gen)
-    console.log(grid)
+    const grid = createGrid(3, 3, 4, {x: 1, y: 0}, gen)
     expect(grid).toEqual([
       [
         {state: FieldState.CLOSED, num: 1, bomb: true},
@@ -116,6 +115,30 @@ describe('logic', () => {
         {state: FieldState.CLOSED, num: 1, bomb: true},
         {state: FieldState.CLOSED, num: 3, bomb: false},
         {state: FieldState.CLOSED, num: 1, bomb: true},
+      ]
+    ])
+
+  });
+  it('should create grid with one bomb', () => {
+
+    const gen: RandomSeed = random('42')
+    const grid = createGrid(3, 3, 1, {x: 1, y: 0}, gen)
+    console.log(grid)
+    expect(grid).toEqual([
+      [
+        {state: FieldState.OPEN, num: 0, bomb: false},
+        {state: FieldState.OPEN, num: 0, bomb: false},
+        {state: FieldState.OPEN, num: 0, bomb: false},
+      ],
+      [
+        {state: FieldState.OPEN, num: 1, bomb: false},
+        {state: FieldState.OPEN, num: 1, bomb: false},
+        {state: FieldState.OPEN, num: 0, bomb: false},
+      ],
+      [
+        {state: FieldState.CLOSED, num: 0, bomb: true},
+        {state: FieldState.OPEN, num: 1, bomb: false},
+        {state: FieldState.OPEN, num: 0, bomb: false},
       ]
     ])
 

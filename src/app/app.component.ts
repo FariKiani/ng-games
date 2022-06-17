@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FieldState, Grid} from "../core/model";
-import {create} from "../core/logic";
+import {createGrid, flagField, openField} from "../core/logic";
 
 import {create as random, RandomSeed} from 'random-seed'
 
@@ -17,14 +17,20 @@ export class AppComponent {
   constructor() {
     console.log(new Date())
     const gen: RandomSeed = random(new Date() + '')
-    this.grid = create(5, 6, 4, {x: 1, y: 3}, gen)
+    this.grid = createGrid(5, 6, 4, {x: 1, y: 3}, gen)
     console.log(gen.random())
     console.log(gen.random())
     console.log(gen.random())
     console.log(gen.random())
   }
 
-  clickHandler(i: number, j: number) {
-    this.grid[i][j].state = FieldState.OPEN
+  onClickHandler(i: number, j: number) {
+    openField(this.grid, i, j)
+  }
+
+  onContextMenu(ev: MouseEvent, i: number, j: number) {
+    ev.preventDefault();
+    ev.stopPropagation()
+    flagField(this.grid, i, j)
   }
 }

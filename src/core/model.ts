@@ -1,7 +1,7 @@
 export enum FieldState {
-  OPEN,
-  CLOSED,
-  FLAGGED
+  OPEN = 'o',
+  CLOSED = 'c',
+  FLAGGED = 'f'
 }
 
 export interface Field {
@@ -17,4 +17,12 @@ export type Grid = Row[]
 export interface Position {
   x: number
   y: number
+}
+
+export interface Game {
+  grid: Grid,
+  h: number,
+  w: number,
+  numOfBombs: number,
+  numOfFlags: number,
 }
