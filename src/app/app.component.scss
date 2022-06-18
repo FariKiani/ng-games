@@ -1,0 +1,72 @@
+.mines-grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.mines-row {
+
+  display: flex;
+  flex-direction: row;
+}
+
+.mines-field {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid black;
+  cursor: pointer;
+
+  &.open {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 120%;
+  }
+
+  $base: #bd0808;
+
+  &.num-1 {
+    color: $base;
+  }
+
+  &.num-3 {
+    color: adjust-hue($base, 45deg);
+  }
+
+  &.num-6 {
+    color: adjust-hue($base, 90deg);
+  }
+
+  &.num-1 {
+    color: adjust-hue($base, 135deg);
+  }
+
+  &.num-4 {
+    color: adjust-hue($base, 180deg);
+  }
+
+  &.num-7 {
+    color: adjust-hue($base, 225deg);
+  }
+
+  &.num-2 {
+    color: adjust-hue($base, 270deg);
+  }
+
+  &.num-5 {
+    color: adjust-hue($base, 315deg);
+  }
+
+
+  &.closed {
+    background: #dddddd;
+  }
+
+  &.flag {
+    .game-over &:not(.bomb) {
+      background: #ffc8c8;
+    }
+  }
+}
+

@@ -1,5 +1,5 @@
-import {FieldState, Grid, Position, Row} from "./model";
-import {RandomSeed} from "random-seed";
+import {FieldState, Game, GameState, Grid, Position, Row} from "./model";
+import {create as random, RandomSeed} from "random-seed";
 
 function createRandomPosition(w: number, h: number, gen: RandomSeed): Position {
   return {
@@ -67,7 +67,7 @@ export function openField(grid: Grid, i: number, j: number) {
     return;
   }
   field.state = FieldState.OPEN;
-  if (field.num !== 0 || field.bomb) {
+  if (field.num !== 0 || field.hasBomb) {
     return;
   }
 
@@ -78,6 +78,24 @@ export function openField(grid: Grid, i: number, j: number) {
     openField(grid, neighbour.y, neighbour.x)
   }
 
+}
+
+export function createEmptyGrid(w: number, h: number): Grid {
+  const grid: Grid = [];
+  for (let i = 0; i < h; i++) {
+    const row: Row = []
+    grid.push(row);
+    for (let j = 0; j < w; j++) {
+
+      grid[i][j] = {
+        state: FieldState.CLOSED,
+        hasBomb: false,
+        num: 0
+      };
+
+    }
+  }
+  return grid
 }
 
 export function createGrid(w: number, h: number, numberOfBombs: number, pos: Position, gen: RandomSeed): Grid {
@@ -111,7 +129,7 @@ export function createGrid(w: number, h: number, numberOfBombs: number, pos: Pos
 
       grid[i][j] = {
         state: FieldState.CLOSED,
-        bomb: bombGrid[i][j],
+        hasBomb: bombGrid[i][j],
         num: countBombs(bombGrid, i, j)
       };
 
@@ -120,4 +138,64 @@ export function createGrid(w: number, h: number, numberOfBombs: number, pos: Pos
   openField(grid, pos.y, pos.x)
 
   return grid
+}
+
+export function isWin(game: Game): boolean {
+  for (const row of game.grid) {
+    for (const field of row) {
+      if (!field.hasBomb && field.state !== FieldState.OPEN)
+        return false;
+    }
+  }
+  return true;
+}
+
+function setFlagsIfWin(game: Game) {
+  if (game.state === GameState.WIN) {
+    for (const row of game.grid) {
+      for (const field of row) {
+        if (field.state == FieldState.CLOSED) {
+          field.state = FieldState.FLAGGED
+        }
+      }
+    }
+  }
+}
+
+export function flag(game: Game, i: number, j: number) {
+  if (game.state !== GameState.RUNNING) {
+    return
+  }
+  flagField(game.grid, i, j)
+}
+
+export function open(game: Game, i: number, j: number) {
+  if (game.state == GameState.INIT) {
+    game.grid = createGrid(game.w, game.h, game.numberOfBombs, {x: j, y: i}, random(game.seed))
+    game.state = GameState.RUNNING
+  }
+  if (game.state !== GameState.RUNNING) {
+    return
+  }
+  openField(game.grid, i, j)
+
+  const field = game.grid[i][j];
+  if (field.hasBomb) {
+    game.state = GameState.LOSE
+  } else if (isWin(game)) {
+    game.state = GameState.WIN
+    setFlagsIfWin(game)
+  }
+}
+
+export function createGame(w: number, h: number, numberOfBombs: number, seed: string): Game {
+  return {
+    grid: createEmptyGrid(w, h),
+    w,
+    h,
+    state: GameState.INIT,
+    numberOfBombs,
+    numberOfFlags: 0,
+    seed,
+  }
 }

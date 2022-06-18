@@ -6,7 +6,7 @@ export enum FieldState {
 
 export interface Field {
   state: FieldState
-  readonly bomb: boolean
+  readonly hasBomb: boolean
   readonly num: number
 }
 
@@ -19,10 +19,19 @@ export interface Position {
   y: number
 }
 
+export enum GameState {
+  WIN = 'WIN',
+  LOSE = 'LOSE',
+  RUNNING = 'RUNNING',
+  INIT = 'INIT'
+}
+
 export interface Game {
   grid: Grid,
   h: number,
   w: number,
-  numOfBombs: number,
-  numOfFlags: number,
+  numberOfBombs: number,
+  numberOfFlags: number,
+  state: GameState,
+  seed: string
 }

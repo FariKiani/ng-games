@@ -1,19 +1,23 @@
-<div class="mines-grid">
-  <div class="mines-row" *ngFor="let row of grid; let i=index">
+<div class="mines-grid" [class.game-over]="game.state == GAME_STATE.LOSE">
+  <div class="mines-row" *ngFor="let row of game.grid; let i=index">
     <ng-container *ngFor="let field of row; let j=index">
-      <div class="mines-field" *ngIf="field.state == STATE.OPEN">
-        {{field.bomb ? '💥' : (field.num)}}
+      <div class="mines-field open" [class]="'num-'+field.num" *ngIf="field.state == STATE.OPEN"
+           (contextmenu)="onContextMenu($event, i,j)"
+      >
+        {{field.hasBomb ? '💥' : (field.num || '')}}
       </div>
       <div class="mines-field closed"
-           *ngIf="field.state == STATE.CLOSED"
+           *ngIf="field.state == STATE.CLOSED && game.state"
            (click)="onClickHandler(i,j)"
            (contextmenu)="onContextMenu($event, i,j)"
       >
-        {{i + ' ' + j}}
+        {{game.state == GAME_STATE.LOSE && field.hasBomb ? '💣' : ''}}
       </div>
-      <div class="mines-field flag" *ngIf="field.state == STATE.FLAGGED" (contextmenu)="onContextMenu($event, i,j)">
+      <div class="mines-field flag" [class.bomb]="field.hasBomb"
+           *ngIf="field.state == STATE.FLAGGED" (contextmenu)="onContextMenu($event, i,j)">
         {{'🚩'}}
       </div>
     </ng-container>
   </div>
+  {{game.state}}
 </div>

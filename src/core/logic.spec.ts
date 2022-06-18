@@ -102,19 +102,19 @@ describe('logic', () => {
     const grid = createGrid(3, 3, 4, {x: 1, y: 0}, gen)
     expect(grid).toEqual([
       [
-        {state: FieldState.CLOSED, num: 1, bomb: true},
-        {state: FieldState.OPEN, num: 2, bomb: false},
-        {state: FieldState.CLOSED, num: 1, bomb: false},
+        {state: FieldState.CLOSED, num: 1, hasBomb: true},
+        {state: FieldState.OPEN, num: 2, hasBomb: false},
+        {state: FieldState.CLOSED, num: 1, hasBomb: false},
       ],
       [
-        {state: FieldState.CLOSED, num: 3, bomb: false},
-        {state: FieldState.CLOSED, num: 3, bomb: true},
-        {state: FieldState.CLOSED, num: 2, bomb: false},
+        {state: FieldState.CLOSED, num: 3, hasBomb: false},
+        {state: FieldState.CLOSED, num: 3, hasBomb: true},
+        {state: FieldState.CLOSED, num: 2, hasBomb: false},
       ],
       [
-        {state: FieldState.CLOSED, num: 1, bomb: true},
-        {state: FieldState.CLOSED, num: 3, bomb: false},
-        {state: FieldState.CLOSED, num: 1, bomb: true},
+        {state: FieldState.CLOSED, num: 1, hasBomb: true},
+        {state: FieldState.CLOSED, num: 3, hasBomb: false},
+        {state: FieldState.CLOSED, num: 1, hasBomb: true},
       ]
     ])
 
@@ -126,19 +126,19 @@ describe('logic', () => {
     console.log(grid)
     expect(grid).toEqual([
       [
-        {state: FieldState.OPEN, num: 0, bomb: false},
-        {state: FieldState.OPEN, num: 0, bomb: false},
-        {state: FieldState.OPEN, num: 0, bomb: false},
+        {state: FieldState.OPEN, num: 0, hasBomb: false},
+        {state: FieldState.OPEN, num: 0, hasBomb: false},
+        {state: FieldState.OPEN, num: 0, hasBomb: false},
       ],
       [
-        {state: FieldState.OPEN, num: 1, bomb: false},
-        {state: FieldState.OPEN, num: 1, bomb: false},
-        {state: FieldState.OPEN, num: 0, bomb: false},
+        {state: FieldState.OPEN, num: 1, hasBomb: false},
+        {state: FieldState.OPEN, num: 1, hasBomb: false},
+        {state: FieldState.OPEN, num: 0, hasBomb: false},
       ],
       [
-        {state: FieldState.CLOSED, num: 0, bomb: true},
-        {state: FieldState.OPEN, num: 1, bomb: false},
-        {state: FieldState.OPEN, num: 0, bomb: false},
+        {state: FieldState.CLOSED, num: 0, hasBomb: true},
+        {state: FieldState.OPEN, num: 1, hasBomb: false},
+        {state: FieldState.OPEN, num: 0, hasBomb: false},
       ]
     ])
 

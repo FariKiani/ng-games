@@ -1,36 +1,32 @@
 import {Component} from '@angular/core';
-import {FieldState, Grid} from "../core/model";
-import {createGrid, flagField, openField} from "../core/logic";
-
-import {create as random, RandomSeed} from 'random-seed'
+import {FieldState, Game, GameState} from "../core/model";
+import {createGame, flag, open} from "../core/logic";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
 
   public STATE = FieldState
-  public grid: Grid;
+  public GAME_STATE = GameState
+  public game: Game;
 
   constructor() {
     console.log(new Date())
-    const gen: RandomSeed = random(new Date() + '')
-    this.grid = createGrid(5, 6, 4, {x: 1, y: 3}, gen)
-    console.log(gen.random())
-    console.log(gen.random())
-    console.log(gen.random())
-    console.log(gen.random())
+
+    this.game = createGame(16, 16, 40, new Date() + '')
+
   }
 
   onClickHandler(i: number, j: number) {
-    openField(this.grid, i, j)
+    open(this.game, i, j)
   }
 
   onContextMenu(ev: MouseEvent, i: number, j: number) {
     ev.preventDefault();
     ev.stopPropagation()
-    flagField(this.grid, i, j)
+    flag(this.game, i, j)
   }
 }
