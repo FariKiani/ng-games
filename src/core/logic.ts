@@ -1,4 +1,4 @@
-import {FieldState, Game, GameState, Grid, Position, Row} from "./model";
+import {Field, FieldState, Game, GameState, Grid, Position, Row} from "./model";
 import {create as random, RandomSeed} from "random-seed";
 
 function createRandomPosition(w: number, h: number, gen: RandomSeed): Position {
@@ -198,4 +198,15 @@ export function createGame(w: number, h: number, numberOfBombs: number, seed: st
     numberOfFlags: 0,
     seed,
   }
+
 }
+
+//
+
+export const copyField = (field: Field): Field => ({...field});
+
+export const copyRow = (row: Row): Row => row.map(copyField);
+
+export const copyGrid = (grid: Grid): Grid => grid.map(copyRow);
+
+export const copyGame = (game: Game): Game => ({...game});

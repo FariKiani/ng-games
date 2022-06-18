@@ -14,19 +14,16 @@ export class AppComponent {
   public game: Game;
 
   constructor() {
-    console.log(new Date())
-
     this.game = createGame(16, 16, 40, new Date() + '')
-
   }
 
-  onClickHandler(i: number, j: number) {
-    open(this.game, i, j)
+  onClickHandler(game: Game, i: number, j: number) {
+    open(game, i, j)
   }
 
-  onContextMenu(ev: MouseEvent, i: number, j: number) {
+  onContextMenu(ev: MouseEvent, game: Game, i: number, j: number) {
     ev.preventDefault();
     ev.stopPropagation()
-    flag(this.game, i, j)
+    flag(game, i, j)
   }
 }
